@@ -57,7 +57,7 @@ public class ProductController {
         byte[] imageFile = product.getImageDate();
 
         return ResponseEntity.ok()
-                .contentType(MediaType.valueOf(product.getImageType("")))
+                .contentType(MediaType.valueOf(product.getImageType()))
                 .body(imageFile);
     }
 
