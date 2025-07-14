@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.print.DocFlavor;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class PrinterStatusService {
@@ -23,22 +23,43 @@ public class PrinterStatusService {
 
     public void checkAndUpdateStatus() {
         // Simulate check
-        String status = checkPrinterAvailability().equals("false") ? "Printer is offline" : checkPrinterAvailability();
+        String status = checkForZebraOrNetworkPrinter().equals("false") ? "Printer is offline" : checkForZebraOrNetworkPrinter();
         broadcastPrinterStatus(status);
     }
 
-    private String checkPrinterAvailability() {
-        PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    private String checkForZebraOrNetworkPrinter() {
+        PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
 
-        if (service != null) {
-            System.out.println("Default printer: " + service.getName());
-            if(service.isDocFlavorSupported(DocFlavor.BYTE_ARRAY.AUTOSENSE)){
+        for (PrintService service : services) {
+            System.out.println("Found printer: " + service.getName());
+
+            if (service.getName().toLowerCase().contains("zebra") &&
+                    service.isDocFlavorSupported(DocFlavor.BYTE_ARRAY.AUTOSENSE)) {
                 return service.getName();
             }
-        } else {
-            System.out.println("No default printer found.");
-            return "false";
+
+            // You can also check for IP, hostname, or network keywords here
+            if (service.getName().toLowerCase().contains("network") ||
+                    service.getName().contains("192.") || service.getName().contains("10.")) {
+                return service.getName();
+            }
         }
-        return "false";
+
+        return "No Zebra or network printer found";
     }
+
+    public PrintService findZebraPrinter() {
+        PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
+        for (PrintService service : services) {
+            if (service.getName().toLowerCase().contains("zdesigner")) {
+                return service;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
 }
