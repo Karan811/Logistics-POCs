@@ -1,0 +1,14 @@
+com\logistics\service\PrinterStatusService.class
+com\logistics\config\WebConfig.class
+com\logistics\config\CorsConfig.class
+com\logistics\controller\ProductController.class
+com\logistics\LogisticsApplication.class
+com\logistics\config\WebSocketConfig.class
+com\logistics\repo\ProductRepo.class
+com\logistics\config\WebConfig$FrontendController.class
+com\logistics\service\AlertEmitterService.class
+com\logistics\model\Product.class
+com\logistics\config\CorsConfig$1.class
+com\logistics\config\PrinterStatusScheduler.class
+com\logistics\controller\AlertController.class
+com\logistics\service\ProductService.class

@@ -39,38 +39,36 @@ public class AlertController {
         service.updateStatus(packageId, "lost");
     }
 
-    @PostMapping("/print")
-    public ResponseEntity<String> printSampleLabel(@RequestBody String content) {
+    @GetMapping("/print")
+    public ResponseEntity<String> printSampleLabel() {
         try {
-            content = "! 0 200 200 500 1\r\n" +
-                    // Use font 4 for headers (straight, not italic)
-                    "TEXT 4 0 30 20 VIMENPAQ\r\n" +
-                    "LINE 30 45 300 45 2\r\n" +
-
-                    // Use font 2 for section headers (medium, straight)
-                    "TEXT 2 0 30 70 FROM:\r\n" +
-                    // Use font 1 for regular text (small, straight)
-                    "TEXT 1 0 30 95 Vimenpaq Logistics\r\n" +
-                    "TEXT 1 0 30 115 123 Industrial Area\r\n" +
-                    "TEXT 1 0 30 135 Ludhiana, Punjab 141001\r\n" +
-                    "TEXT 1 0 30 155 Phone: +91-161-2345678\r\n" +
-
-                    // To section with proper spacing
-                    "TEXT 2 0 30 190 TO:\r\n" +
-                    "TEXT 1 0 30 215 Customer Name\r\n" +
-                    "TEXT 1 0 30 235 Customer Address\r\n" +
-                    "TEXT 1 0 30 255 City, State, PIN\r\n" +
-
-                    // Package details
-                    "TEXT 2 0 30 290 PACKAGE ID:\r\n" +
-                    "TEXT 3 0 30 315 PKG123456789\r\n" +
-
-                    // Barcode with enough space
-                    "BARCODE 128 1 1 50 30 350 PKG123456789\r\n" +
-
-                    // Footer
-                    "TEXT 1 0 30 420 Track: www.vimenpaq.com\r\n" +
-                    "PRINT\r\n";
+            String zpl =
+                    "^XA\r\n" +
+                            "^PW600\r\n" +
+                            "^LL500\r\n" +
+                            "\r\n" +
+                            "^FO30,20^A0N,40,40^FDVIMENPAQ^FS\r\n" +
+                            "^FO30,45^GB270,2,2^FS\r\n" +
+                            "\r\n" +
+                            "^FO30,70^A0N,30,30^FDFROM:^FS\r\n" +
+                            "^FO30,95^A0N,25,25^FDVimenpaq Logistics^FS\r\n" +
+                            "^FO30,115^A0N,25,25^FD123 Industrial Area^FS\r\n" +
+                            "^FO30,135^A0N,25,25^FDLudhiana, Punjab 141001^FS\r\n" +
+                            "^FO30,155^A0N,25,25^FDPhone: +91-161-2345678^FS\r\n" +
+                            "\r\n" +
+                            "^FO30,190^A0N,30,30^FDTO:^FS\r\n" +
+                            "^FO30,215^A0N,25,25^FDCustomer Name^FS\r\n" +
+                            "^FO30,235^A0N,25,25^FDCustomer Address^FS\r\n" +
+                            "^FO30,255^A0N,25,25^FDCity, State, PIN^FS\r\n" +
+                            "\r\n" +
+                            "^FO30,290^A0N,30,30^FDPACKAGE ID:^FS\r\n" +
+                            "^FO30,315^A0N,40,40^FDPKG123456789^FS\r\n" +
+                            "\r\n" +
+                            "^FO30,350^BY2,2,60^BCN,60,Y,N^FDPKG123456789^FS\r\n" +
+                            "\r\n" +
+                            "^FO30,420^A0N,25,25^FDTrack: www.vimenpaq.com^FS\r\n" +
+                            "\r\n" +
+                            "^XZ\r\n";
             PrintService printService = printerStatusService.findZebraPrinter();
 
             if (printService == null) {
@@ -81,19 +79,19 @@ public class AlertController {
 
             // Option 1: Use INPUT_STREAM.AUTOSENSE (recommended for raw commands)
             DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(
-                    content.getBytes(StandardCharsets.UTF_8)
-            );
-            Doc doc = new SimpleDoc(inputStream, flavor, null);
+//            ByteArrayInputStream inputStream = new ByteArrayInputStream(
+//                    content.getBytes(StandardCharsets.UTF_8)
+//            );
+//            Doc doc = new SimpleDoc(inputStream, flavor, null);
+//
+//            // Add print attributes
+//            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+//            attributes.add(new Copies(1));
+//
+//            System.out.println("Sending to printer:\n" + content);
+          //  job.print(doc, attributes);
 
-            // Add print attributes
-            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(new Copies(1));
-
-            System.out.println("Sending to printer:\n" + content);
-            job.print(doc, attributes);
-
-            return ResponseEntity.ok("Print job sent successfully to " + printService.getName());
+            return ResponseEntity.ok(zpl);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

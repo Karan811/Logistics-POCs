@@ -1,0 +1,12 @@
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\config\CorsConfig.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\config\PrinterStatusScheduler.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\config\WebConfig.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\config\WebSocketConfig.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\controller\AlertController.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\controller\ProductController.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\LogisticsApplication.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\model\Product.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\repo\ProductRepo.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\service\AlertEmitterService.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\service\PrinterStatusService.java
+D:\Vimenpaq\new\Logistics-POCs\src\main\java\com\logistics\service\ProductService.java
